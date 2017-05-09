@@ -1,0 +1,34 @@
+{% extends 'core_app/base_visitor.html' %}
+{% block index %}<a class="navbar-brand" href="{% url 'user_app:index' %}">Controle Médico</a>{% endblock %}
+{% block body %}
+<div class="albums-container container-fluid">
+    <div class="row">
+        <div class="col-sm-12" align="center">
+            <h1><strong>Funcionalidades</strong></h1>
+        </div>
+        <div class="col-sm-12" align="center">
+            <h3><strong>Olá, {{name}}</strong></h3>
+        </div>
+        {% if funcs %}
+            {% for func in funcs %}
+                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                    <div class="thumbnail">
+                        <a href="{% url func.url %}">
+                            <img src="{{ func.logo.url }}" class="img-responsive">
+                        </a>
+                        <div class="caption" align="center">
+                            <h3> <a href="{% url func.url %}">{{ func.name }}</a></h3>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-sm-12">
+                <br>
+                <!--Chegará aqui se faltar internet, tratar depois... -->
+                <h1>Nenumha funcionalidade cadastrada, <a href="{% url 'user_app:error' %}">contate</a> o administrador</h1>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

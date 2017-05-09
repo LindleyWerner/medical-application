@@ -1,0 +1,73 @@
+{% extends 'core_app/base_visitor.html' %}
+{% block index %}<a class="navbar-brand" href="{% url 'user_app:index' %}">Controle Médico</a>{% endblock %}
+{% block body %}
+<div class="albums-container container-fluid">
+    <div class="row">
+        <div class="col-sm-12" align="center">
+            <form class="form-horizontal" role="search" method="get" action="{% url 'user_app:recipes' %}">
+                <div class="form-group">
+                    <input type="text" size="30" class="fieldSearch" placeholder ="Digite o nome do médico ou o local"
+                           name="q" value="{{ request.GET.q }}">
+                    <button type="submit" class="btn btn-success">Pesquisar</button>
+			    </div>
+            </form>
+        </div>
+        <div class="col-sm-12" align="center">
+            <h1><strong>Receitas</strong></h1>
+        </div>
+        {% if recipes %}
+            {% for recipe in recipes %}
+                <div class="col-md-12">
+                    <ul>
+                        <li><strong>Médico: </strong>{{recipe.doctor}}</li>
+                        <li><strong>Local: </strong>{{recipe.place}}</li>
+                        <li><strong>Descrição: </strong>{{recipe.description}}</li>
+                        <li><strong>Data: </strong>{{recipe.pub_date}}</li>
+                    </ul>
+                    <br>
+                </div>
+            {% endfor %}
+            {% if not all %}
+            <div class="col-md-12" align="center">
+                <form action="{% url 'user_app:show_all_recipes' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="show_all" />
+                    <button type="submit" class="btn btn-success">Mostrar todas</button>
+                </form>
+            </div>
+            <div class="row"></div>
+            {% else %}
+                <div class="col-md-12" align="center">
+                <form action="{% url 'user_app:recipes' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="show_all" />
+                    <button type="submit" class="btn btn-success"> Mostrar menos </button>
+                </form>
+            </div>
+            <div class="row"></div>
+            {% endif %}
+
+        {% elif query_result %}
+            <div class="col-sm-12" align="center">
+                <h2><strong>Médicos e/ou locais encontrados</strong></h2>
+            </div>
+             {% for recipe in query_result %}
+                <div class="col-md-12">
+                    <ul>
+                        <li><strong>Médico: </strong>{{recipe.doctor}}</li>
+                        <li><strong>Local: </strong>{{recipe.place}}</li>
+                        <li><strong>Descrição: </strong>{{recipe.description}}</li>
+                        <li><strong>Data: </strong>{{recipe.pub_date}}</li>
+                    </ul>
+                    <br>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-sm-12">
+                <br>
+                <h1>Você não tem receitas.</h1>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
