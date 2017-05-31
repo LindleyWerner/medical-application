@@ -1,5 +1,5 @@
-{% extends 'core_app/base_visitor.html' %}
-{% block index %}<a class="navbar-brand" href="{% url 'user_app:index' %}">Controle Médico</a>{% endblock %}
+{% extends 'core_app/base.html' %}
+
 {% block body %}
 <div class="albums-container container-fluid">
     <div class="row">
@@ -26,7 +26,7 @@
             <div class="col-sm-12">
                 <br>
                 <!--Chegará aqui se faltar internet, tratar depois... -->
-                <h1>Nenumha funcionalidade cadastrada, <a href="{% url 'user_app:error' %}">contate</a> o administrador</h1>
+                <h1>Nenumha funcionalidade cadastrada, <a href="{% url 'core_app:error' %}">contate</a> o administrador</h1>
             </div>
         {% endif %}
     </div>

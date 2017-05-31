@@ -1,4 +1,4 @@
-{% extends 'core_app/base_visitor.html' %}
+{% extends 'core_app/base.html' %}
 
 {% block body %}
 <div class="albums-container container-fluid">
@@ -7,19 +7,19 @@
             <h1><strong>Bem vindo ao melhor aplicativo de controle médico!</strong></h1>
         </div>
         <div class="col-sm-12" align="center">
-            <h3><strong>Escolha uma das opções abaixo para fazer login</strong></h3>
+            <h3><strong>Como você quer se registar?</strong></h3>
         </div>
         <div class="col-sm-0 col-md-3">
         </div>
         <div class="panel panel-default col-sm-12 col-md-6">
             <div class="panel-body">
-                <ul><a href="{% url 'user_app:index' %}">
+                <ul><a href="{% url 'user_app:register' %}">
                     <h1><span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>&nbsp;Paciente</h1>
                 </a></ul>
-                <ul><a href="#">
+                <ul><a href="{%url 'doctor_app:register'%}">
                     <h1><span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>&nbsp;Médico</h1>
                 </a></ul>
-                <ul><a href="#">
+                <ul><a href="{%url 'adm_app:register'%}">
                     <h1><span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>&nbsp;Administrador</h1>
                 </a></ul>
             </div>

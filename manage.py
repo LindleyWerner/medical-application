@@ -4,6 +4,8 @@ import sys
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "SGCM_V2.settings")
+    #This line was add to resolve imports from another app
+    sys.path.insert(0, '../..')
     try:
         from django.core.management import execute_from_command_line
     except ImportError:

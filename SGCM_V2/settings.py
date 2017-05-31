@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
@@ -25,7 +24,7 @@ SECRET_KEY = 'bda02n9_(kp*4q^g)4t)v0zd71+=-y=v)tl43yave@_^$phzp+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.107']
+ALLOWED_HOSTS = ['192.168.1.107', '127.0.0.1']
 
 
 # Application definition
@@ -34,6 +33,7 @@ INSTALLED_APPS = [
     'core_app.apps.CoreAppConfig',
     'doctor_app.apps.DoctorAppConfig',
     'user_app.apps.UserAppConfig',
+    'adm_app.apps.AdmAppConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -101,7 +101,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/

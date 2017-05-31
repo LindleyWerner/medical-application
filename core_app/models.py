@@ -1,7 +1,7 @@
 '''from django.db import models
-from django.conf import settings
+from SGCM_V2.SGCM_V2 import settings
 
-# Create your models here.
+
 class Custom_user(models.Model):
     django_user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
