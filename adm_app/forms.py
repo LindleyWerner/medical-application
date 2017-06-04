@@ -1,5 +1,5 @@
 from django import forms
-from .models import Adm_user
+from .models import Pending_adm, Pending_doctor, Adm_user
 
 
 class AdmForm(forms.ModelForm):
@@ -17,3 +17,20 @@ class AdmForm(forms.ModelForm):
     class Meta:
         model = Adm_user
         fields = ['username', 'email', 'cnpj', 'address', 'phones', 'site', 'password1', 'password2', 'validation_code']
+
+
+class NewAdmForm(forms.ModelForm):
+    email = forms.EmailField(label="Email", min_length=8, max_length=50, required=True)
+    cnpj = forms.CharField(label="CNPJ", min_length=14, max_length=18, required=True)
+
+    class Meta:
+        model = Pending_adm
+        fields = ['email', 'cnpj']
+
+class NewDoctorForm(forms.ModelForm):
+    email = forms.EmailField(label="Email", min_length=8, max_length=50, required=True)
+    crm = forms.CharField(label="CRM", min_length=1, max_length=18, required=True)
+
+    class Meta:
+        model = Pending_doctor
+        fields = ['email', 'crm']

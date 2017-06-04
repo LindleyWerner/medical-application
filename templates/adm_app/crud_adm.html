@@ -1,0 +1,85 @@
+{% extends 'core_app/base.html' %}
+
+{% block body %}
+<div class="albums-container container-fluid">
+    <div class="row">
+        <div class="col-sm-12" align="center">
+            <form class="form-horizontal" role="search" method="get" action="{% url 'adm_app:list_adm' %}">
+                <div class="form-group">
+                    <input type="text" size="30" class="fieldSearch" placeholder ="Pesquise aqui"
+                           name="q" value="{{ request.GET.q }}">
+                    <button type="submit" class="btn btn-success">Pesquisar</button>
+			    </div>
+            </form>
+        </div>
+        <div class="col-sm-12" align="center">
+            <h1><strong>Administradores</strong></h1>
+        </div>
+        <div class="col-sm-12" align="center">
+            <a href="{% url 'adm_app:add_adm' %}"><button name="adicionar" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Novo adm</button></a>
+        </div>
+        <div class="col-sm-12 col-md-12"><br></div>
+        {% if adms %}
+            {% for adm in adms %}
+                <div class="row">
+                    <div class="col-md-10 col-sm-12">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <td colspan="2" align="center"><strong>{{adm.full_name}}</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>CNPJ</th>
+                                    <td>{{adm.cnpj}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Email</th>
+                                    <td>{{adm.django_user.email}}</td>
+                                </tr>
+                                <tr>
+                                   <th>Telefone(s)</th>
+                                    <td>{{adm.phones}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Endereço</th>
+                                    <td>{{adm.address}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Site</th>
+                                    <td>{{adm.site}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-sm-12 col-md-2">
+                        <a href="{% url 'adm_app:rm_adm'  adm.django_user.id %}" class="btn btn-primary btn-sm" role="button"
+                           onclick="return confirm('Tem certeza que deseja excluir este administrdor?\nIsto o apagará ' +
+                            'permanentemente do sistema, juntamente com todos seus dados!')">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12"><br></div>
+            {% endfor %}
+        {% else %}
+            <div class="col-sm-0 col-md-3"></div>
+            <div class="col-sm-12 col-md-6 panel panel-default" align="center" >
+                <div class="panel-body" >
+                    <br>
+                    {% if not_found %}
+                        <h1>Nenhum administrador encontrado</h1>
+                        <a href="{% url 'adm_app:list_adm' %}"><button name="q" class="btn btn-primary" value="">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Ver tudo</button></a>
+                    {% else %}
+                        <h1>Nenhum administrador cadastrado</h1>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-sm-0 col-md-3"></div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

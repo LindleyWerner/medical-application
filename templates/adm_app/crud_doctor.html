@@ -1,0 +1,89 @@
+{% extends 'core_app/base.html' %}
+
+{% block body %}
+<div class="albums-container container-fluid">
+    <div class="row">
+        <div class="col-sm-12" align="center">
+            <form class="form-horizontal" role="search" method="get" action="{% url 'adm_app:list_doctor' %}">
+                <div class="form-group">
+                    <input type="text" size="30" class="fieldSearch" placeholder ="Pesquise aqui"
+                           name="q" value="{{ request.GET.q }}">
+                    <button type="submit" class="btn btn-success">Pesquisar</button>
+			    </div>
+            </form>
+        </div>
+        <div class="col-sm-12" align="center">
+            <h1><strong>Médicos</strong></h1>
+        </div>
+        <div class="col-sm-12" align="center">
+            <a href="{% url 'adm_app:add_doctor' %}"><button name="adicionar" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Novo médico</button></a>
+        </div>
+        <div class="col-sm-12 col-md-12"><br></div>
+        {% if doctors %}
+            {% for doctor in doctors %}
+                <div class="row">
+                    <div class="col-md-10 col-sm-12">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <td colspan="2" align="center"><strong>{{doctor.full_name}}</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>CRM</th>
+                                    <td>{{doctor.crm}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Email</th>
+                                    <td>{{doctor.django_user.email}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Data de aniversário</th>
+                                    <td>{{doctor.birth_date}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Sexo</th>
+                                    <td>{{doctor.gender}}</td>
+                                </tr>
+                                <tr>
+                                   <th>Telefone(s)</th>
+                                    <td>{{doctor.phones}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Endereço</th>
+                                    <td>{{doctor.address}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-sm-12 col-md-2">
+                        <a href="{% url 'adm_app:rm_doctor'  doctor.django_user.id %}" class="btn btn-primary btn-sm" role="button"
+                           onclick="return confirm('Tem certeza que deseja excluir este médico?\nIsto o apagará ' +
+                            'permanentemente do sistema, juntamente com todos seus dados!')">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12"><br></div>
+            {% endfor %}
+        {% else %}
+            <div class="col-sm-0 col-md-3"></div>
+            <div class="col-sm-12 col-md-6 panel panel-default" align="center" >
+                <div class="panel-body" >
+                    <br>
+                    {% if not_found %}
+                        <h1>Nenhum médico encontrado</h1>
+                        <a href="{% url 'adm_app:list_doctor' %}"><button name="q" class="btn btn-primary" value="">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Ver tudo</button></a>
+                    {% else %}
+                        <h1>Nenhum médico cadastrado</h1>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-sm-0 col-md-3"></div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'core_app/base.html' %}
+
+{% block body %}
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-sm-12 col-md-3">
+        <!-- empty -->
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3 align="center"><strong> Crie um novo {{what_type}}</strong></h3>
+                    {% if error_message %}
+                        <p><strong><red> {{ error_message }}</red></strong></p>
+                    {% endif %}
+                    <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="form-group col-sm-12 col-md-12 col-lg-12" align="center">
+                                <span class="text-danger small">{{ field.errors }}</span>
+                                <label>{{ field.label }}</label>
+                                <br>
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+
+                        <div class="form-group" align="center">
+                            <div class="col-sm-12 col-md-12">
+                                <button type="submit" class="btn btn-success"
+                                onclick="return confirm('Deseja criar um {{what_type}}?\n' +
+                                 'Tenha certeza que os dados estão corretos anter de confirmar!')">Criar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-3">
+        <!-- empty -->
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

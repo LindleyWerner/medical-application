@@ -16,13 +16,13 @@ class Doctor_user(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
-    validation_code = models.CharField(max_length=50, default="qwert123")
     full_name = models.CharField(max_length=70)
     birth_date = models.CharField(max_length=10)
     gender = models.CharField(max_length=10)
     crm = models.CharField(max_length=15)
     address = models.CharField(max_length=70)
     phones = models.CharField(max_length=30)
+    adm_father = models.IntegerField(default=1);
     password_tryed = models.IntegerField(default=0)
 
     def __str__(self):

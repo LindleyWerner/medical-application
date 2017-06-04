@@ -1,0 +1,103 @@
+{% extends 'core_app/base.html' %}
+
+{% block body %}
+<div class="albums-container container-fluid">
+    <div class="row">
+        <div class="col-sm-12" align="center">
+            <form class="form-horizontal" role="search" method="get" action="{% url 'adm_app:list_pending_solicitations' %}">
+                <div class="form-group">
+                    <input type="text" size="30" class="fieldSearch" placeholder ="Pesquise aqui"
+                           name="q" value="{{ request.GET.q }}">
+                    <button type="submit" class="btn btn-success">Pesquisar</button>
+			    </div>
+            </form>
+        </div>
+        <div class="col-sm-12" align="center">
+            <h1><strong>Solicitações pendentes</strong></h1>
+            <h4>Aqui são mostrados os novos médicos e administradores que você criou, mas ainda não completaram
+             o cadastro a partir do e-mail enviado à eles.</h4>
+        </div>
+        <div class="col-sm-12 col-md-12 row" align="center"><br>
+        {% if  pending_doctors or pending_adms %}
+            {% if  doctor_not_found or adm_not_found %}
+                <a href="{% url 'adm_app:list_pending_solicitations' %}"><button name="q" class="btn btn-primary" value="">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Ver tudo</button></a>
+            {% endif %}
+        {% endif %}
+        </div>
+        <div class="col-md-12 col-sm-12" align="center">
+            <h2>Médicos</h2>
+        </div>
+        {% if pending_doctors %}
+            {% for pending_doctor in pending_doctors %}
+                <div class="col-md-10 col-sm-12">
+                    <ul>
+                        <li><strong>Email: </strong>{{pending_doctor.email}}</li>
+                        <li><strong>CRM: </strong>{{pending_doctor.crm}}</li>
+                    </ul>
+                </div>
+                <div class="col-sm-12 col-md-2">
+                    <a href="{% url 'adm_app:rm_pending_doctor'  pending_doctor.id %}" class="btn btn-primary btn-sm" role="button"
+                       onclick="return confirm('Tem certeza que deseja excluir esta solicitação?\nO médico não ' +
+                        'poderá mais criar sua conta!')">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                </div>
+                <div class="col-sm-12 col-md-12"><br></div>
+            {% endfor %}
+        {% else %}
+            <div class="row">
+                <div class="col-sm-0 col-md-3"></div>
+                <div class="col-sm-12 col-md-6 panel panel-default" align="center" >
+                    <div class="panel-body" >
+                        <br>
+                        {% if doctor_not_found %}
+                            <h1>Nenhum médico encontrado</h1>
+                        {% else %}
+                            <h1>Você não tem solicitações de médicos pendentes</h1>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-sm-0 col-md-3"></div>
+            </div>
+        {% endif %}
+        <div class="col-sm-12 col-md-12"><br></div>
+        <div class="col-md-12 col-sm-12" align="center">
+            <h2>Administradores</h2>
+        </div>
+        {% if pending_adms %}
+            {% for pending_adm in pending_adms %}
+                <div class="col-md-10 col-sm-12">
+                    <ul>
+                        <li><strong>Email: </strong>{{pending_adm.email}}</li>
+                        <li><strong>CNPJ: </strong>{{pending_adm.cnpj}}</li>
+                    </ul>
+                </div>
+                <div class="col-sm-12 col-md-2">
+                    <a href="{% url 'adm_app:rm_pending_adm'  pending_adm.id %}" class="btn btn-primary btn-sm" role="button"
+                       onclick="return confirm('Tem certeza que deseja excluir esta solicitação?\nO administrador não ' +
+                        'poderá mais criar sua conta!')">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                </div>
+                <div class="col-sm-12 col-md-12"><br></div>
+            {% endfor %}
+        {% else %}
+            <div class="row">
+                <div class="col-sm-0 col-md-3"></div>
+                <div class="col-sm-12 col-md-6 panel panel-default" align="center" >
+                    <div class="panel-body" >
+                        <br>
+                        {% if adm_not_found %}
+                            <h1>Nenhum administrador encontrado</h1>
+                        {% else %}
+                            <h1>Você não tem solicitações de administradores pendentes</h1>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-sm-0 col-md-3"></div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

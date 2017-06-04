@@ -3,6 +3,9 @@ from django.contrib.auth import authenticate, login
 from .models import *
 from .forms import DoctorForm
 from django.contrib.auth.models import User
+from adm_app.models import Pending_doctor
+from django.contrib.auth.models import Group
+
 DEFAULT_CODE = "q1a2z3"
 
 
@@ -18,7 +21,7 @@ def doctor_login(request, user):
     context = {'user_type': None}
     if user is not None:
         doctor = Doctor_user.objects.get(django_user=user)
-        if doctor is not None and doctor.validation_code == DEFAULT_CODE:
+        if doctor is not None:
             login(request, user)
             context['funcs'] = Funcionalidade.objects.all()
             context['name'] = user.first_name
@@ -57,50 +60,49 @@ def register(request):
             validation_code = form.cleaned_data['validation_code']
 
             try:
-                user = User.objects.get(username=email)
+                pending_user = Pending_doctor.objects.get(email=email)
             except:
-                user = None
+                pending_user = None
+            try:
+                User.objects.get(username=email)
+                user_exist = True
+            except:
+                user_exist = False
 
-            if user is None:
+            if pending_user is None:
                 context['error_message'] = "O email digitado não consta no sistema, digite corretamente ou "\
                                             "solicite seu cadastro ao administrador do seu local de trabalho"
                 return render(request, 'core_app/register.html', context)
-
-            try:
-                doctor = Doctor_user.objects.get(django_user=user)
-            except:
-                doctor = None
-
-            if doctor is not None:
-                if doctor.validation_code == DEFAULT_CODE:
+            elif user_exist:
+                context['error_message'] = "Usuário já cadastrado no sistema"
+                context.pop('form')
+                return render(request, 'core_app/login.html', context)
+            else:
+                if pending_user.validation_code == DEFAULT_CODE:
                     context['error_message'] = 'Esta conta já foi registrada'
                     context.pop('form')
                     return render(request, 'core_app/login.html', context)
-                if doctor.crm != crm:
+                if pending_user.crm != crm:
                     context['error_message'] = "O CRM digitado não consta no sistema, digite corretamente ou "\
                                                 "solicite seu cadastro ao administrador do seu local de trabalho"
                     return render(request, 'core_app/register.html', context)
                 if password1 != password2:
                     context['error_message'] = "As senhas devem ser iguais"
                     return render(request, 'core_app/register.html', context)
-                if doctor.validation_code != validation_code:
+                if pending_user.validation_code != validation_code:
                     context['error_message'] = "O código de validação está incorreto"
                     return render(request, 'core_app/register.html', context)
 
+                group = Group.objects.get(name='Doctor')
                 name_list = name.split()
-                user.set_password(password1)
-                user.first_name = name_list[0]
-                user.last_name = name_list[-1]
-                user.save()
+                user = User.objects.create_user(username=email, email=email, password=password1,
+                                                first_name=name_list[0], last_name=name_list[-1])
+                user.groups.add(group)
 
-                doctor.validation_code = DEFAULT_CODE
-                doctor.crm = crm
-                doctor.full_name = name
-                doctor.birth_date = birth_date
-                doctor.gender = gender
-                doctor.address = address
-                doctor.phones = phones
-                doctor.save()
+                Doctor_user.objects.create(django_user=user, crm=crm, adm_father=pending_user.adm_father, address=address,
+                                        full_name=name, birth_date=birth_date, phones=phones, gender=gender)
+
+                pending_user.delete()
 
                 actual_user = authenticate(username=email, password=password1)
                 if actual_user is not None:
@@ -112,10 +114,6 @@ def register(request):
                         context['name'] = user.first_name
                         return render(request, 'doctor_app/index.html', context)
                 context['error_message'] = "Erro de autenticação, tente novamente"
-            else:
-                context['error_message'] = "Usuário já cadastrado no sistema"
-                context.pop('form')
-                return render(request, 'core_app/login.html', context)
     return render(request, 'core_app/register.html', context)
 
 
